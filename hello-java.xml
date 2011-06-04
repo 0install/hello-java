@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<interface xmlns="http://zero-install.sourceforge.net/2004/injector/interface" xmlns:compile="http://zero-install.sourceforge.net/2006/namespaces/0compile">
+  <name>hello-java</name>
+  <summary>minimal template package for Java programs</summary>
+  <description>
+    This Java program outputs the message "Hello World". You can create new releases of it
+    using 0release, compile it with 0compile, etc. It gets the Java JDK and JRE though 0install.
+  </description>
+
+  <homepage>http://0install.net/templates.html</homepage>
+
+  <feed-for interface='http://0install.net/tests/hello-java.xml'/>
+
+  <implementation arch="*-src" id="." version="0.1-pre" compile:min-version='0.24'>
+    <command name='compile' shell-command='"${SCONS}" -f "${SRCDIR}/src/main/SConstruct" "${DISTDIR}"'>
+      <!-- You could add a 'main' attribute here to support 0launch < 0.53 -->
+      <compile:implementation arch='*-*'>
+	<environment name='CLASSPATH' insert='.'/>
+	<command name='run' path='hello.jar'>
+	  <runner interface='http://repo.roscidus.com/java/openjdk-6-jre'>
+	    <arg>-jar</arg>
+	  </runner>
+	</command>
+      </compile:implementation>
+    </command>
+    <requires interface="http://repo.roscidus.com/java/openjdk-6-jdk">
+      <environment name='PATH' insert='bin'/>
+    </requires>
+    <requires interface="http://0install.net/2006/3rd-party/SCons.xml">
+      <environment name='SCONS' mode='replace' insert='scons.py'/>
+      <version not-before="2"/>
+    </requires>
+  </implementation>
+</interface>
